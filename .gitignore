@@ -1,0 +1,15 @@
+#ignore everything within this directory 
+/*
+
+#things to include
+!/libs/
+!/libs/*
+!/libs/**/*
+
+!/src/
+!/src/*
+!/src/**/*
+!/JAR/
+!/JAR/*
+!/JAR/**/*
+!.gitignore
