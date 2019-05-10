@@ -1,11 +1,12 @@
 package typetracker;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -20,16 +21,23 @@ import java.util.logging.Logger;
 public class Tracker extends Application {
     private Label label;
     private Processor processor;
+
+    private final int sceneWidth = 200, sceneHeight = 50;
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        Pane root = new VBox();
-        Scene scene = new Scene(root,400,400);
-        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
 
+        Pane root = new HBox();
+        root.setPadding(new Insets(10, 20, 10, 20));
+        ((HBox) root).setSpacing(20);
+        Scene scene = new Scene(root,sceneWidth,sceneHeight);
+        scene.getStylesheets().add("styles.css");
+        primaryStage.setScene(scene);
 
         addLabel(root);
         processor = new SimpleProcessor(label);
@@ -43,6 +51,7 @@ public class Tracker extends Application {
     }
 
     private void addLabel(Pane parent) {
+
         parent.getChildren().add(label = new Label());
     }
 
@@ -73,7 +82,9 @@ public class Tracker extends Application {
                 @Override
                 public void nativeKeyPressed(NativeKeyEvent nativeEvent)
                 {
-                    //dispatches event to relevant classes
+                    //dispatches event to relevant classes if key pressed isn't space or backspace.
+                    int code = nativeEvent.getKeyCode();
+                    if((code != NativeKeyEvent.VC_SPACE) && (code != NativeKeyEvent.VC_BACKSPACE))
                     processor.processKey(new Key(nativeEvent));
                 }
             });
